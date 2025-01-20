@@ -1,6 +1,6 @@
 package com.rure.angkorlife.data.entity
 
-data class CandidateList(
+data class CandidateProfile(
     val id: Int, // 후보자 ID
     val candidateNumber: Int, // 후보자 등록 번호
     val name: String, // 후보자 이름

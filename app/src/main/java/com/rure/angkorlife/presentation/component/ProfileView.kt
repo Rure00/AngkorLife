@@ -1,21 +1,20 @@
 package com.rure.angkorlife.presentation.component
 
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,15 +25,13 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rure.angkorlife.R
-import com.rure.angkorlife.data.entity.CandidateDetail
-import com.rure.angkorlife.data.entity.CandidateList
+import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.ui.theme.TextBlue
-import com.rure.angkorlife.ui.theme.TextGray2
 import com.rure.angkorlife.ui.theme.White
 
 @Composable
 fun ProfileView(
-    candidateProfile: CandidateList,
+    candidateProfile: CandidateProfile,
     isVoted: Boolean,
     onProfileClick: () -> Unit,
     onVote: (Boolean) -> Unit
@@ -52,7 +49,11 @@ fun ProfileView(
                 .build(),
             contentDescription = null,
             placeholder = painterResource(R.drawable.profile_placeholder),
-            modifier = Modifier.size(156.dp).clickable { onProfileClick() },
+            modifier = Modifier.size(156.dp)
+                .clip(shape = RoundedCornerShape(8.dp))
+                .clickable { onProfileClick() },
+            error = painterResource(R.drawable.fail_profile),
+            contentScale = ContentScale.Crop,
             onSuccess = { Log.d(tag, "Image load success") },
             onError = { Log.d(tag, "Image load Error: ${it.result.throwable.message}") },
         )
