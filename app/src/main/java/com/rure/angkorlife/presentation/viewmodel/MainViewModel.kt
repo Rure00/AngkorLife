@@ -2,6 +2,7 @@ package com.rure.angkorlife.presentation.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,14 @@ class MainViewModel @Inject constructor(
 
     fun login(id: String) {
         this.id = id
+    }
+
+    fun vote(candidateId: String) {
+        viewModelScope.launch {
+            repository.vote(id, candidateId)
+        }
+
+        //TODO: 리스트 업데이트 하기
     }
 
     fun doTest() {

@@ -21,6 +21,7 @@ fun RoundButton(
     label: String,
     color: Color,
     modifier: Modifier = Modifier,
+    textColor: Color = White,
     onClick: () -> Unit,
 ) {
     Box(
@@ -31,7 +32,7 @@ fun RoundButton(
     ) {
         Text(
             text = label,
-            color = White,
+            color = textColor,
             fontWeight = FontWeight.W700,
             fontSize = 16.sp,
             lineHeight = 24.sp,

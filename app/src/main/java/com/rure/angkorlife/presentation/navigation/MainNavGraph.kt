@@ -2,10 +2,13 @@ package com.rure.angkorlife.presentation.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.rure.angkorlife.presentation.screen.HomeScreen
 import com.rure.angkorlife.presentation.screen.LoginScreen
+import com.rure.angkorlife.presentation.screen.ProfileScreen
 
 const val MainNavRoute = "main"
 fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: (Destination) -> Unit) {
@@ -14,7 +17,9 @@ fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: 
         startDestination = Destination.Login.route
     ) {
         composable(route = Destination.Home.route) {
-            HomeScreen()
+            HomeScreen {
+                navController.navigate(Destination.Profile.route + "/${it.id}")
+            }
             onScreenChanged(Destination.Home)
         }
 
@@ -25,7 +30,14 @@ fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: 
             onScreenChanged(Destination.Login)
         }
 
-        composable(route = Destination.Profile.route) {
+        composable(
+            route = Destination.Profile.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType }
+            )
+        ) {
+            val candidateId = it.arguments?.getInt("userId") ?: throw  Exception("No Arguments For id.")
+            ProfileScreen(candidateId)
             onScreenChanged(Destination.Profile)
         }
     }
