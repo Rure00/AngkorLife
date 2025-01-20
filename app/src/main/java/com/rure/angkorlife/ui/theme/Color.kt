@@ -16,6 +16,7 @@ val BackgroundBlack = Color(0xFF121212)
 val TextBlue = Color(0xFF6F76FF)
 val TextGray = Color(0xFF7C7C7C)
 val TextGray2 = Color(0xFFAEAEB2)
+val TextGray3 = Color(0xFFB9B9B9)
 
 val ButtonBlue = Color(0xFF4232D5)
 val ToggleWhite = Color(0x80FFFFFF)
