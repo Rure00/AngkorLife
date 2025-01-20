@@ -4,4 +4,11 @@
     <string name="enter_id">Enter your ID</string>
     <string name="login">Log in</string>
     <string name="colon">:</string>
+    <string name="guide_label">WORLD MISS UNIVERSITY</string>
+    <string name="guide_title">Mobile Voting\nInformation</string>
+    <string name="guide_body">2024 World Miss University brings\ntogether future global leaders who embody both beauty and intellect.</string>
+    <string name="period">Period</string>
+    <string name="period_content">10/17(Thu) 12PM - 10/31(Thu) 6PM</string>
+    <string name="how_to_vote">How to vote</string>
+    <string name="vote_guide_content">⦁ Up to three people can participate in early voting per day. \n\n⦁ Three new voting tickets are issued every day at midnight (00:00), and you can vote anew every day during the early voting period</string>
 </resources>

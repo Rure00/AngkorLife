@@ -25,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.rure.angkorlife.R
 import com.rure.angkorlife.presentation.component.CountDownView
+import com.rure.angkorlife.presentation.screen.page.HomeCountPage
+import com.rure.angkorlife.presentation.screen.page.VoteGuidePage
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.LocalDate
@@ -36,56 +38,13 @@ fun HomeScreen(
 
 ) {
     val listState = rememberLazyListState()
-    val goalTime = remember { LocalDateTime.of(2025, Month.FEBRUARY, 3, 0, 0) }
-    val now = remember {
-        mutableStateOf(LocalDateTime.now())
-    }
-
-    val duration = remember {
-        derivedStateOf {
-            Duration.between(now.value, goalTime)
-        }
-    }
-
-    LaunchedEffect(now.value) {
-        delay(1000)
-        now.value = LocalDateTime.now()
-    }
 
     LazyColumn(
         state = listState
     ) {
         item {
-
-            Column(
-                modifier = Modifier.fillMaxSize().background(color = Color.Black)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.home_top),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(23.dp))
-
-                Box(
-                    modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(horizontal = 57.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CountDownView(duration.value)
-                }
-
-                Spacer(modifier = Modifier.height(23.dp))
-
-                Image(
-                    painter = painterResource(R.drawable.home_bottom),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
+            HomeCountPage()
+            VoteGuidePage()
         }
     }
 }

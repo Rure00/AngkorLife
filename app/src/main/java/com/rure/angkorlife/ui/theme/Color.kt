@@ -23,3 +23,7 @@ val ToggleWhite = Color(0x80FFFFFF)
 
 val BoxBackground = Color(0xFF252525)
 
+
+val GradientTop = Color(0xFF060203)
+val GradientBottom = Color(0xFF1C1C1C)
+
