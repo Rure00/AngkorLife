@@ -73,6 +73,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Compose Navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.compose.foundation:foundation:1.7.6")
+
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
@@ -83,4 +87,7 @@ dependencies {
     // okhttp3
     implementation("com.squareup.okhttp3:okhttp:4.8.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
+
+    // reflect
+    implementation(kotlin("reflect"))
 }
