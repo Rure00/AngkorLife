@@ -18,7 +18,7 @@ interface RetrofitService {
         @Body voteRequestDto: VoteRequestDto
     ): Response<Unit>
 
-    @GET("vote/candidate")
+    @GET("vote/candidate/{id}")
     suspend fun inquiryCandidate(
         @Path("id") id: String,
         @Query("userId") userId: String
@@ -27,7 +27,9 @@ interface RetrofitService {
 
     @GET("vote/candidate/list")
     suspend fun getCandidateList(
-        @Body candidateListRequestDto: CandidateListRequestDto
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: List<String>,
     ): Response<PageCandidateList>
 
 

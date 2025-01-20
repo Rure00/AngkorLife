@@ -18,3 +18,7 @@ enum class SortType(val value: String) {
     VoteCntASC("voteCnt,ASC"),
     VoteCntDESC("voteCnt,DESC")
 }
+
+fun List<SortType>.toStringList(): List<String> {
+    return this.map { it.value }
+}

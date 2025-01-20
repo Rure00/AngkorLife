@@ -6,6 +6,7 @@ import com.rure.angkorlife.data.RetrofitService
 import com.rure.angkorlife.data.dto.BaseExceptionDto
 import com.rure.angkorlife.data.dto.CandidateListRequestDto
 import com.rure.angkorlife.data.dto.VoteRequestDto
+import com.rure.angkorlife.data.dto.toStringList
 import com.rure.angkorlife.data.entity.CandidateDetail
 import com.rure.angkorlife.data.entity.PageCandidateList
 import javax.inject.Inject
@@ -39,7 +40,11 @@ class RetrofitDataSource @Inject constructor(
     }
 
     suspend fun getCandidateList(candidateListRequestDto: CandidateListRequestDto): Result<PageCandidateList> {
-        val response = service.getCandidateList(candidateListRequestDto)
+        val response = service.getCandidateList(
+            page = candidateListRequestDto.page,
+            size = candidateListRequestDto.size,
+            sort = candidateListRequestDto.sort.toStringList()
+        )
         return if(response.isSuccessful) {
             Result.success(response.body()!!)
         } else {
