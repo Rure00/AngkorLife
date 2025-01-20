@@ -25,6 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
+import com.rure.angkorlife.presentation.component.AppTopBar
 import com.rure.angkorlife.presentation.navigation.Destination
 import com.rure.angkorlife.presentation.navigation.MainNavRoute
 import com.rure.angkorlife.presentation.navigation.mainNavGraph
@@ -62,11 +63,12 @@ class MainActivity : ComponentActivity() {
 fun MainPage() {
     val navController = rememberNavController()
     val screen: MutableState<Destination> = remember {
-        mutableStateOf(Destination.Home)
+        mutableStateOf(Destination.Login)
     }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = { AppTopBar(navController, screen.value) },
         containerColor = BackgroundBlack,
     ) { innerPadding ->
         val pagerState = rememberPagerState(0, 0f) {
@@ -82,7 +84,9 @@ fun MainPage() {
                 navController,
                 startDestination = MainNavRoute
             ) {
-                mainNavGraph(navController)
+                mainNavGraph(navController) {
+                    screen.value = it
+                }
             }
         }
     }

@@ -17,6 +17,14 @@ class MainViewModel @Inject constructor(
 
     private val tag = "MainViewModel"
 
+    private var id: String = ""
+
+
+
+    fun login(id: String) {
+        this.id = id
+    }
+
     fun doTest() {
         CoroutineScope(Dispatchers.IO).launch {
             with(repository) {
