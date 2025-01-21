@@ -54,6 +54,23 @@ class RetrofitDataSource @Inject constructor(
         }
     }
 
+    suspend fun getVoted(userId: String): Result<List<Int>> {
+        val response = service.getVoteHistory(userId = userId)
+
+        return if(response.isSuccessful) {
+            Result.success(response.body()!!)
+        } else {
+            val error = parseErrorBody(response.errorBody()?.string())
+            Log.i(tag, "getVoted failed(${error.errorCode}): ${error.errorMessage}")
+            Result.failure(Exception(error.errorMessage))
+        }
+    }
+
+
+
+
+
+
     private fun parseErrorBody(errorBody: String?): BaseExceptionDto {
         return try {
             Gson().fromJson(errorBody, BaseExceptionDto::class.java)

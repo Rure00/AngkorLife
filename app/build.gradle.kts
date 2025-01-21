@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.rure.angkorlife"
-        minSdk = 30
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -73,6 +73,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Compose Navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.compose.foundation:foundation:1.7.6")
+
     // hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
@@ -83,4 +87,13 @@ dependencies {
     // okhttp3
     implementation("com.squareup.okhttp3:okhttp:4.8.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
+
+    // reflect
+    implementation(kotlin("reflect"))
+
+    // Coil
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-ktor2:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
 }
