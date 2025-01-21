@@ -1,6 +1,8 @@
 package com.rure.angkorlife.presentation.screen.page
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -60,8 +62,9 @@ fun VotePage(
 
     val maxHeight = remember { mutableStateOf(9999) }
 
-    val onVote = { id: String ->
+    val onVote = { id: String, context: Context ->
         if(mainViewModel.vote(id)) openDialog()
+        else Toast.makeText(context, context.getString(R.string.no_more_vote), Toast.LENGTH_SHORT).show()
     }
 
     LazyVerticalGrid(
@@ -74,7 +77,7 @@ fun VotePage(
         verticalArrangement = Arrangement.spacedBy(40.dp),
         userScrollEnabled = false
     ) {
-        Log.d(tag, "State list: ${candidateProfiles.joinToString { it.name }}")
+
 
         item(span = { GridItemSpan(this.maxLineSpan) }) {
             Column {
@@ -103,6 +106,7 @@ fun VotePage(
         }
 
         itemsIndexed(candidateProfiles) { index, item ->
+            val context = LocalContext.current
             ProfileView(
                 candidateProfile = item,
                 isVoted = item.voted,
@@ -110,7 +114,7 @@ fun VotePage(
                     toProfileScreen(item)
                 },
                 onVote = {
-                    onVote(item.candidateId.toString())
+                    onVote(item.candidateId.toString(), context)
                 }
             )
         }

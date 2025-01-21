@@ -28,6 +28,7 @@ import com.rure.angkorlife.R
 import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.utils.getDecimalFormat
 import com.rure.angkorlife.ui.theme.BoxBackground
+import com.rure.angkorlife.ui.theme.ButtonBlue
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.White
 
@@ -71,7 +72,7 @@ fun ProfileView(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(R.string.voted_num, getDecimalFormat(candidateProfile.voteCnt)),
-            color = TextBlue,
+            color = ButtonBlue,
             fontWeight = FontWeight.W500,
             fontSize = 16.sp,
             lineHeight = 19.sp
@@ -80,9 +81,9 @@ fun ProfileView(
 
         if(isVoted) {
             RoundButton(
-                label = stringResource(R.string.vote_str),
+                label = stringResource(R.string.voted_str),
                 color = White,
-                textColor = TextBlue,
+                textColor = ButtonBlue,
                 modifier = Modifier.fillMaxWidth()
             ) {
 
@@ -90,7 +91,7 @@ fun ProfileView(
         } else {
             RoundButton(
                 label = stringResource(R.string.vote_str),
-                color = TextBlue,
+                color = ButtonBlue,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 onVote(true)

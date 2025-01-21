@@ -1,6 +1,8 @@
 package com.rure.angkorlife.presentation.screen
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,6 +64,7 @@ import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.TextGray
 import com.rure.angkorlife.ui.theme.TextGray2
 import com.rure.angkorlife.ui.theme.ToggleWhite
+import com.rure.angkorlife.ui.theme.TransparentBlack
 import com.rure.angkorlife.ui.theme.TransparentWhite
 import com.rure.angkorlife.ui.theme.White
 
@@ -84,8 +87,9 @@ fun ProfileScreen(
     }
 
     val showDialog = remember { mutableStateOf(false) }
-    val onVote = { id: String ->
+    val onVote = { id: String, context: Context ->
         if(mainViewModel.vote(id)) { showDialog.value = true }
+        else Toast.makeText(context, context.getString(R.string.no_more_vote), Toast.LENGTH_SHORT).show()
     }
 
     val pagerState = rememberPagerState(0, 0.0f) { targetCandidate.value.profileUrls.size }
@@ -133,7 +137,6 @@ fun ProfileScreen(
                     modifier = Modifier.offset(y = (-10).dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Log.d(tag, "pagercount: ${pagerState.pageCount}")
                     (0..<pagerState.pageCount).forEach {
                         val color = if(it == pagerState.currentPage) ButtonBlue
                         else ToggleWhite
@@ -195,7 +198,7 @@ fun ProfileScreen(
         }
 
         Box(
-            modifier = Modifier.background(color = BackgroundBlack2).padding(top = 12.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
+            modifier = Modifier.background(color = TransparentBlack).padding(top = 12.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
                 .onSizeChanged {
                     bottomPadding.value = it.height
                 },
@@ -205,19 +208,20 @@ fun ProfileScreen(
                 RoundButton(
                     label = stringResource(R.string.vote_str),
                     color = White,
-                    textColor = TextBlue,
+                    textColor = ButtonBlue,
                     drawableId = R.drawable.voted,
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
                 }
             } else {
+                val context = LocalContext.current
                 RoundButton(
                     label = stringResource(R.string.vote_str),
-                    color = TextBlue,
+                    color = ButtonBlue,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    onVote(candidateId.toString())
+                    onVote(candidateId.toString(), context)
                 }
             }
         }

@@ -53,15 +53,16 @@ class MainViewModel @Inject constructor(
         return true
     }
 
-    fun getCandidateProfile(candidateId: String): ProfileData? {
-        return _candidateProfileData.value.firstOrNull { it.candidateId == candidateId.toInt() }
-    }
-
     private fun loadCandidate() {
         viewModelScope.launch {
             when(val result = repository.getCandidateProfileData(userId = id)) {
                 is RetrofitResult.Success -> {
                     _candidateProfileData.value = result.value
+                    var cnt = 0
+                    result.value.forEach {
+                        if(it.voted) cnt += 1
+                    }
+                    voteCnt.intValue = cnt
                 }
                 is RetrofitResult.Failure -> {
                     Log.i(tag, "loadCandidate is failed: ${result.error.message}")

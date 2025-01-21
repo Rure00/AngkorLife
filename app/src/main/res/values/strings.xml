@@ -27,4 +27,6 @@
     <string name="dot">⦁</string>
     <string name="first_guide">Up to three people can participate in early voting per day.</string>
     <string name="second_guide">Three new voting tickets are issued every day at midnight (00:00), and you can vote anew every day during the early voting period</string>
+    <string name="voted_str">Voted</string>
+    <string name="no_more_vote">You can vote up to three times.</string>
 </resources>
