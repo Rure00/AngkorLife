@@ -3,6 +3,7 @@ package com.rure.angkorlife.presentation.screen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,11 +32,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,6 +71,7 @@ import com.rure.angkorlife.ui.theme.ToggleWhite
 import com.rure.angkorlife.ui.theme.TransparentBlack
 import com.rure.angkorlife.ui.theme.TransparentWhite
 import com.rure.angkorlife.ui.theme.White
+import kotlinx.coroutines.delay
 
 @Composable
 fun ProfileScreen(
@@ -95,11 +100,23 @@ fun ProfileScreen(
     val pagerState = rememberPagerState(0, 0.0f) { targetCandidate.value.profileUrls.size }
     val scrollState = rememberScrollState()
 
+    var okayToNext by remember { mutableStateOf(false) }
+    LaunchedEffect(okayToNext) {
+        delay(3000)
+        pagerState.animateScrollToPage(
+            page = (pagerState.currentPage + 1).mod(pagerState.pageCount),
+            animationSpec = tween(500)
+        )
+        okayToNext = !okayToNext
+    }
+
     if(showDialog.value) {
         VoteConfirmDialog {
             showDialog.value = false
         }
     }
+
+
 
     Box(
         modifier = Modifier.wrapContentSize().background(color = BackgroundBlack2),
@@ -116,21 +133,24 @@ fun ProfileScreen(
                 HorizontalPager(
                     modifier = Modifier.fillMaxWidth().height(LocalConfiguration.current.screenWidthDp.dp),
                     state = pagerState,
-                    userScrollEnabled = true
+                    userScrollEnabled = false,
+                    beyondViewportPageCount = 1
                 ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(targetCandidate.value.profileUrls[pagerState.currentPage])
-                            .build(),
-                        contentDescription = null,
-                        placeholder = painterResource(R.drawable.profile_placeholder),
-                        modifier = Modifier.fillMaxSize()
-                            .background(color = BoxBackground),
-                        error = painterResource(R.drawable.fail_profile),
-                        contentScale = ContentScale.Crop,
-                        onSuccess = { Log.d(tag, "Image load success") },
-                        onError = { Log.d(tag, "Image load Error: ${it.result.throwable.message}") },
-                    )
+                    val url = targetCandidate.value.profileUrls[it]
+                    key(it) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(url)
+                                .build(),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                                .background(color = BoxBackground),
+                            error = painterResource(R.drawable.fail_profile),
+                            contentScale = ContentScale.Crop,
+                            onSuccess = { Log.d(tag, "Image load success") },
+                            onError = { Log.d(tag, "Image load Error: ${it.result.throwable.message}") },
+                        )
+                    }
                 }
 
                 Row(
@@ -198,7 +218,7 @@ fun ProfileScreen(
         }
 
         Box(
-            modifier = Modifier.background(color = TransparentBlack).padding(top = 12.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
+            modifier = Modifier.background(color = BackgroundBlack2).padding(top = 12.dp, bottom = 24.dp, start = 16.dp, end = 16.dp)
                 .onSizeChanged {
                     bottomPadding.value = it.height
                 },
