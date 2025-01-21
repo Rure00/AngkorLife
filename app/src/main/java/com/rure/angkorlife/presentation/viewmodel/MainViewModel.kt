@@ -44,12 +44,13 @@ class MainViewModel @Inject constructor(
         loadCandidate()
     }
 
-    fun vote(candidateId: String) {
-        if(voteCnt.intValue >= 3) return
+    fun vote(candidateId: String): Boolean {
+        if(voteCnt.intValue >= 3) return false
         viewModelScope.launch {
             repository.vote(id, candidateId)
             loadCandidate()
         }
+        return true
     }
 
     fun getCandidateProfile(candidateId: String): ProfileData? {

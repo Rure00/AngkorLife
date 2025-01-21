@@ -61,8 +61,7 @@ fun VotePage(
     val maxHeight = remember { mutableStateOf(9999) }
 
     val onVote = { id: String ->
-        mainViewModel.vote(id)
-        openDialog()
+        if(mainViewModel.vote(id)) openDialog()
     }
 
     LazyVerticalGrid(

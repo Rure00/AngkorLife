@@ -53,6 +53,7 @@ import coil3.request.ImageRequest
 import com.rure.angkorlife.R
 import com.rure.angkorlife.presentation.MainActivity
 import com.rure.angkorlife.presentation.component.RoundButton
+import com.rure.angkorlife.presentation.component.VoteConfirmDialog
 import com.rure.angkorlife.presentation.viewmodel.MainViewModel
 import com.rure.angkorlife.ui.theme.BackgroundBlack2
 import com.rure.angkorlife.ui.theme.BoxBackground
@@ -82,9 +83,19 @@ fun ProfileScreen(
         }
     }
 
+    val showDialog = remember { mutableStateOf(false) }
+    val onVote = { id: String ->
+        if(mainViewModel.vote(id)) { showDialog.value = true }
+    }
 
     val pagerState = rememberPagerState(0, 0.0f) { targetCandidate.value.profileUrls.size }
     val scrollState = rememberScrollState()
+
+    if(showDialog.value) {
+        VoteConfirmDialog {
+            showDialog.value = false
+        }
+    }
 
     Box(
         modifier = Modifier.wrapContentSize().background(color = BackgroundBlack2),
@@ -206,7 +217,7 @@ fun ProfileScreen(
                     color = TextBlue,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    mainViewModel.vote(candidateId = candidateId.toString())
+                    onVote(candidateId.toString())
                 }
             }
         }

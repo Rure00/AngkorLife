@@ -30,14 +30,6 @@ fun HomeScreen(
     val showDialog = remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
 
-    //Log.d("HomeScreen", listState.firstVisibleItemScrollOffset.toString())
-    val dialogOffset = remember {
-        derivedStateOf {
-
-            listState.firstVisibleItemScrollOffset
-        }
-    }
-
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         state = listState
