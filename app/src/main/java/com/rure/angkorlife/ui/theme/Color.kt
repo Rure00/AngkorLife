@@ -14,6 +14,7 @@ val White = Color(0xFFFFFFFF)
 val TransparentWhite = Color(0x0DFFFFFF)
 val BackgroundBlack = Color(0xFF121212)
 val BackgroundBlack2 = Color(0xFF070909)
+val TransparentBlack = Color(0x80000000)
 
 val TextBlue = Color(0xFF6F76FF)
 val TextGray = Color(0xFF7C7C7C)
@@ -22,12 +23,14 @@ val TextGray3 = Color(0xFFB9B9B9)
 
 val ButtonBlue = Color(0xFF4232D5)
 val ToggleWhite = Color(0x80FFFFFF)
+val BorderGray = Color(0xFFE5E5EA)
 
 val BoxBackground = Color(0xFF252525)
 
 
 val GradientTop = Color(0xFF060203)
 val GradientBottom = Color(0xFF1C1C1C)
+
 
 
 

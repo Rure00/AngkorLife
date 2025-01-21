@@ -21,4 +21,7 @@
     <string name="hobbies">Hobbies</string>
     <string name="talent">Talent</string>
     <string name="ambition">Ambition</string>
+    <string name="vote_complete">Voting completed</string>
+    <string name="thank_voting">Thank you for voting</string>
+    <string name="confirm_str">Confirm</string>
 </resources>

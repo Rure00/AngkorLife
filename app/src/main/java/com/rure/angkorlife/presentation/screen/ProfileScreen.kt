@@ -60,6 +60,7 @@ import com.rure.angkorlife.ui.theme.ButtonBlue
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.TextGray
 import com.rure.angkorlife.ui.theme.TextGray2
+import com.rure.angkorlife.ui.theme.ToggleWhite
 import com.rure.angkorlife.ui.theme.TransparentWhite
 import com.rure.angkorlife.ui.theme.White
 
@@ -118,13 +119,13 @@ fun ProfileScreen(
                 }
 
                 Row(
-                    modifier = Modifier.offset(y = 10.dp),
+                    modifier = Modifier.offset(y = (-10).dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Log.d(tag, "pagercount: ${pagerState.pageCount}")
                     (0..<pagerState.pageCount).forEach {
                         val color = if(it == pagerState.currentPage) ButtonBlue
-                        else White
+                        else ToggleWhite
 
                         Spacer(modifier = Modifier.size(8.dp).background(color = color, shape = CircleShape))
                     }

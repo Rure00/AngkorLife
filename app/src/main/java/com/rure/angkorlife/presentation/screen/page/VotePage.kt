@@ -50,6 +50,7 @@ import com.rure.angkorlife.ui.theme.White
 
 @Composable
 fun VotePage(
+    openDialog: () -> Unit,
     toProfileScreen: (ProfileData) -> Unit,
     mainViewModel: MainViewModel = viewModel(LocalContext.current as MainActivity)
 ) {
@@ -58,6 +59,11 @@ fun VotePage(
     val candidateProfiles by mainViewModel.candidateProfileData.collectAsState()
 
     val maxHeight = remember { mutableStateOf(9999) }
+
+    val onVote = { id: String ->
+        mainViewModel.vote(id)
+        openDialog()
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -105,7 +111,7 @@ fun VotePage(
                     toProfileScreen(item)
                 },
                 onVote = {
-                    mainViewModel.vote(item.candidateId.toString())
+                    onVote(item.candidateId.toString())
                 }
             )
         }
