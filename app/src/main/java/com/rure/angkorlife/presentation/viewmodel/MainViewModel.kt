@@ -1,12 +1,15 @@
 package com.rure.angkorlife.presentation.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rure.angkorlife.data.entity.CandidateDetail
 import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
+import com.rure.angkorlife.presentation.state.ProfileData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -29,82 +32,39 @@ class MainViewModel @Inject constructor(
 
     private var id: String = ""
 
-    private val _candidateDetails = MutableStateFlow(listOf<CandidateDetail>())
-    val candidateDetails get() = _candidateDetails.asStateFlow()
+    private val _candidateProfileData = MutableStateFlow(listOf<ProfileData>())
+    val candidateProfileData get() = _candidateProfileData.asStateFlow()
 
-    private val _candidateProfiles = MutableStateFlow(listOf<CandidateProfile>())
-    val candidateProfiles get() = _candidateProfiles.asStateFlow()
-
-    init {
-        Log.d(tag, "Created!")
-    }
+    private val voteCnt = mutableIntStateOf(0)
 
     fun login(id: String) {
+        _candidateProfileData.value = listOf()
+
         this.id = id
         loadCandidate()
     }
 
     fun vote(candidateId: String) {
+        if(voteCnt.intValue >= 3) return
         viewModelScope.launch {
             repository.vote(id, candidateId)
             loadCandidate()
         }
-
-        _candidateDetails.value = candidateDetails.value.map {
-            if(it.id == candidateId.toInt()) {
-                it.copy(voted = true)
-            } else it
-        }
     }
 
-    fun getCandidateProfile(candidateId: String): CandidateProfile? {
-        return candidateProfiles.value.firstOrNull { it.id == candidateId.toInt() }
+    fun getCandidateProfile(candidateId: String): ProfileData? {
+        return _candidateProfileData.value.firstOrNull { it.candidateId == candidateId.toInt() }
     }
-
-    fun isVoted(candidateId: Int) = (candidateDetails.value.any { (it.id == candidateId) && it.voted })
 
     private fun loadCandidate() {
         viewModelScope.launch {
-            when(val profileResult = repository.getCandidateList()) {
+            when(val result = repository.getCandidateProfileData(userId = id)) {
                 is RetrofitResult.Success -> {
-                    _candidateProfiles.value = profileResult.value
-                    val asyncTask = mutableListOf<Deferred<CandidateDetail?>>()
-                    profileResult.value.forEach {
-                        asyncTask.add(
-                            async {
-                                when(val result = repository.inquiryCandidate(candidateId = it.id.toString(), userId = id)) {
-                                    is RetrofitResult.Success -> result.value
-                                    else -> null
-                                }
-                            }
-                        )
-                    }
-
-                    _candidateDetails.value = asyncTask.awaitAll().filterNotNull()
-                    Log.d(tag, "detail: ${_candidateDetails.value.joinToString { it.name ?: "null" }}")
-                    Log.d(tag, "profile: ${candidateProfiles.value.joinToString { it.name ?: "null" }}")
+                    _candidateProfileData.value = result.value
                 }
                 is RetrofitResult.Failure -> {
-                    Log.e(tag, "loadCandidate has Failed: ${profileResult.error.message}")
+                    Log.i(tag, "loadCandidate is failed: ${result.error.message}")
                 }
-            }
-        }
-    }
-
-    fun doTest() {
-        CoroutineScope(Dispatchers.IO).launch {
-            with(repository) {
-                val voteResult = vote(userId = "hello!", "50")
-                Log.d(tag, "voteResult: ${voteResult}")
-
-                val inquiryResult = inquiryCandidate("48", "userA")
-                Log.d(tag, "inquiryResult: ${if(inquiryResult is RetrofitResult.Success) "Success" else false}")
-
-                val getListResult = getCandidateList()
-                Log.d(tag, "getListResult: ${if(getListResult is RetrofitResult.Success) "Success" else false}")
-
-                val getVoted = getMyVoteList(id)
-                Log.d(tag, "getVoted: ${if(getVoted is RetrofitResult.Success) "Success: ${getVoted.value.joinToString()}" else false}")
             }
         }
     }

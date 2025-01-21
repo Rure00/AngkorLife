@@ -26,13 +26,14 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rure.angkorlife.R
 import com.rure.angkorlife.data.entity.CandidateProfile
+import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.utils.getDecimalFormat
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.White
 
 @Composable
 fun ProfileView(
-    candidateProfile: CandidateProfile,
+    candidateProfile: ProfileData,
     isVoted: Boolean,
     onProfileClick: () -> Unit,
     onVote: (Boolean) -> Unit

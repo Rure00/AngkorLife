@@ -10,6 +10,12 @@ import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.data.entity.PageCandidateList
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
+import com.rure.angkorlife.presentation.state.ProfileData
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RetrofitRepositoryImpl @Inject constructor(
@@ -27,39 +33,53 @@ class RetrofitRepositoryImpl @Inject constructor(
         return result.isSuccess
     }
 
-    override suspend fun inquiryCandidate(
-        candidateId: String,
-        userId: String
-    ): RetrofitResult<CandidateDetail> {
-        val result = dataSource.inquiryCandidate(id = candidateId, userId = userId)
-        val body = result.getOrNull()
-        return if(result.isSuccess &&  body != null) {
-            RetrofitResult.Success(body)
-        } else {
-            RetrofitResult.Failure(
-                result.exceptionOrNull() ?: Exception("inquiryCandidate) Body is null $tag")
-            )
-        }
-    }
-
-    override suspend fun getCandidateList(): RetrofitResult<List<CandidateProfile>> {
-        val result = dataSource.getCandidateList(
-            candidateListRequestDto = CandidateListRequestDto(
+    override suspend fun getCandidateProfileData(userId: String): RetrofitResult<List<ProfileData>> {
+        val listResult = dataSource.getCandidateList(candidateListRequestDto = CandidateListRequestDto(
                 page = 0,
                 size = 1000,
                 sort = listOf(SortType.CandidateNumberASC)
             )
         )
-        val body = result.getOrNull()
-
-        return if(result.isSuccess && body != null) {
-            RetrofitResult.Success(body.content)
-        } else {
-            RetrofitResult.Failure(
-                result.exceptionOrNull() ?: Exception("getCandidateList) Body is null $tag")
+        val listBody = listResult.getOrNull()
+            ?: return RetrofitResult.Failure(
+                listResult.exceptionOrNull() ?: Exception("getCandidateProfileData) Body is null $tag")
             )
+
+        val task = mutableListOf<Deferred<CandidateDetail?>>()
+        withContext(Dispatchers.IO) {
+            listBody.content.forEach {
+                task.add(
+                    async { dataSource.inquiryCandidate(id = it.id.toString(),userId = userId).getOrNull() }
+                )
+            }
         }
 
+        val list = task.awaitAll().filterNotNull()
+
+        return if(list.isEmpty()) {
+            RetrofitResult.Failure(Exception("getCandidateProfileData) Body is null $tag"))
+        } else {
+            RetrofitResult.Success(
+                list.mapIndexed { index, item ->
+                    ProfileData(
+                        name = item.name,
+                        candidateId = item.id,
+                        candidateNumber = item.candidateNumber,
+                        profileUrl = listBody.content[index].profileUrl,
+                        voteCnt = listBody.content[index].voteCnt.toInt(),
+                        voted = item.voted,
+                        country = item.country,
+                        education = item.education,
+                        major = item.major,
+                        hobby = item.hobby,
+                        talent = item.talent,
+                        ambition = item.ambition,
+                        contents = item.contents,
+                        regDt = item.regDt
+                    )
+                }
+            )
+        }
     }
 
     override suspend fun getMyVoteList(userId: String): RetrofitResult<List<Int>> {
@@ -73,4 +93,41 @@ class RetrofitRepositoryImpl @Inject constructor(
             )
         }
     }
+
+//    override suspend fun inquiryCandidate(
+//        candidateId: String,
+//        userId: String
+//    ): RetrofitResult<CandidateDetail> {
+//        val result = dataSource.inquiryCandidate(id = candidateId, userId = userId)
+//        val body = result.getOrNull()
+//        return if(result.isSuccess &&  body != null) {
+//            RetrofitResult.Success(body)
+//        } else {
+//            RetrofitResult.Failure(
+//                result.exceptionOrNull() ?: Exception("inquiryCandidate) Body is null $tag")
+//            )
+//        }
+//    }
+//
+//    override suspend fun getCandidateList(): RetrofitResult<List<CandidateProfile>> {
+//        val result = dataSource.getCandidateList(
+//            candidateListRequestDto = CandidateListRequestDto(
+//                page = 0,
+//                size = 1000,
+//                sort = listOf(SortType.CandidateNumberASC)
+//            )
+//        )
+//        val body = result.getOrNull()
+//
+//        return if(result.isSuccess && body != null) {
+//            RetrofitResult.Success(body.content)
+//        } else {
+//            RetrofitResult.Failure(
+//                result.exceptionOrNull() ?: Exception("getCandidateList) Body is null $tag")
+//            )
+//        }
+//
+//    }
+
+
 }

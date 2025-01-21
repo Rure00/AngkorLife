@@ -38,6 +38,7 @@ import com.rure.angkorlife.data.entity.CandidateDetail
 import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.presentation.MainActivity
 import com.rure.angkorlife.presentation.component.ProfileView
+import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.viewmodel.MainViewModel
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.TextGray2
@@ -45,12 +46,12 @@ import com.rure.angkorlife.ui.theme.White
 
 @Composable
 fun VotePage(
-    toProfileScreen: (CandidateProfile) -> Unit,
+    toProfileScreen: (ProfileData) -> Unit,
     mainViewModel: MainViewModel = viewModel(LocalContext.current as MainActivity)
 ) {
     val tag = "VotePage"
 
-    val candidateProfiles by mainViewModel.candidateProfiles.collectAsState()
+    val candidateProfiles by mainViewModel.candidateProfileData.collectAsState()
 
     val maxHeight = remember { mutableStateOf(9999) }
 
@@ -63,7 +64,6 @@ fun VotePage(
         userScrollEnabled = false
     ) {
         Log.d(tag, "State list: ${candidateProfiles.joinToString { it.name }}")
-        Log.d(tag, "viewmodel list: ${mainViewModel.candidateProfiles.value.joinToString { it.name }}")
 
         item(span = { GridItemSpan(this.maxLineSpan) }) {
             Column {
@@ -94,12 +94,12 @@ fun VotePage(
         itemsIndexed(candidateProfiles) { index, item ->
             ProfileView(
                 candidateProfile = item,
-                isVoted = mainViewModel.isVoted(item.id),
+                isVoted = item.voted,
                 onProfileClick = {
                     toProfileScreen(item)
                 },
                 onVote = {
-                    mainViewModel.vote(item.id.toString())
+                    mainViewModel.vote(item.candidateId.toString())
                 }
             )
         }
@@ -114,54 +114,4 @@ fun VotePage(
             )
         }
     }
-
-//    Column(
-//        modifier = Modifier.fillMaxWidth(),
-//    ) {
-//        Spacer(modifier = Modifier.height(50.dp))
-//        Spacer(modifier = Modifier.height(3.dp).width(20.dp).background(color = TextBlue))
-//        Spacer(modifier = Modifier.height(10.dp))
-//
-//        Text(
-//            text = stringResource(R.string.candidate_title),
-//            color = White,
-//            fontWeight = FontWeight.W600,
-//            fontSize = 28.sp,
-//            lineHeight = 29.sp
-//        )
-//        Spacer(modifier = Modifier.height(25.dp))
-//
-//        Text(
-//            text = stringResource(R.string.vote_info),
-//            color = TextGray2,
-//            fontWeight = FontWeight.W400,
-//            fontSize = 14.sp,
-//            lineHeight = 18.sp
-//        )
-//        Spacer(modifier = Modifier.height(40.dp))
-//
-//        LazyVerticalGrid(
-//            columns = GridCells.Fixed(2),
-//            modifier = Modifier.fillMaxWidth().padding(horizontal = 19.dp),
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalArrangement = Arrangement.spacedBy(40.dp)
-//        ) {
-//            itemsIndexed(candidateList.value) { index, item ->
-//                ProfileView(
-//                    candidateProfile = item,
-//                    isVoted = votedCandidateList.value.any {
-//                        item.id == it.id
-//                    },
-//                    onProfileClick = {
-//                        toProfileScreen(item)
-//                    },
-//                    onVote = {
-//                        //TODO: Do Vote
-//
-//                    }
-//                )
-//            }
-//        }
-//        Spacer(modifier = Modifier.height(28.dp))
-//    }
 }

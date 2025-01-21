@@ -18,7 +18,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: 
     ) {
         composable(route = Destination.Home.route) {
             HomeScreen {
-                navController.navigate(Destination.Profile.route + "/${it.id}")
+                navController.navigate(Destination.Profile.route + "/${it.candidateId}")
             }
             onScreenChanged(Destination.Home)
         }
@@ -36,7 +36,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: 
                 navArgument("id") { type = NavType.IntType }
             )
         ) {
-            val candidateId = it.arguments?.getInt("userId") ?: throw  Exception("No Arguments For id.")
+            val candidateId = it.arguments?.getInt("id") ?: throw  Exception("No Arguments For id.")
             ProfileScreen(candidateId)
             onScreenChanged(Destination.Profile)
         }

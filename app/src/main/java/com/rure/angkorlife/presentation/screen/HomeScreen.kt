@@ -10,10 +10,11 @@ import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.presentation.screen.page.HomeCountPage
 import com.rure.angkorlife.presentation.screen.page.VoteGuidePage
 import com.rure.angkorlife.presentation.screen.page.VotePage
+import com.rure.angkorlife.presentation.state.ProfileData
 
 @Composable
 fun HomeScreen(
-    toProfileScreen: (CandidateProfile) -> Unit
+    toProfileScreen: (ProfileData) -> Unit
 ) {
 
     val listState = rememberLazyListState()
