@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -9,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.rure.angkorlife"
-        minSdk = 30
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -47,6 +50,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -66,4 +72,28 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Compose Navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("androidx.compose.foundation:foundation:1.7.6")
+
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // retrofit2
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // okhttp3
+    implementation("com.squareup.okhttp3:okhttp:4.8.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
+
+    // reflect
+    implementation(kotlin("reflect"))
+
+    // Coil
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-ktor2:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.4")
 }
