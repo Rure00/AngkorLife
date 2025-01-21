@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -103,16 +104,39 @@ fun VoteGuidePage(
                     lineHeight = 15.sp
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = stringResource(R.string.vote_guide_content),
-                    color = White,
-                    fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 22.sp
-                )
+
+                Column {
+                    DotContent(stringResource(R.string.first_guide))
+                    Spacer(modifier = Modifier.height(17.dp))
+                    DotContent(stringResource(R.string.second_guide))
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(50.dp))
+    }
+}
+
+@Composable
+private fun DotContent(content: String) {
+    Row(
+        modifier = Modifier.wrapContentSize(),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.dot),
+            color = White,
+            fontWeight = FontWeight.W400,
+            fontSize = 13.sp,
+            lineHeight = 15.sp
+        )
+        Text(
+            text = content,
+            color = White,
+            fontWeight = FontWeight.W400,
+            fontSize = 13.sp,
+            lineHeight = 15.sp
+        )
     }
 }

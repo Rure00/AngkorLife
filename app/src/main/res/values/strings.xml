@@ -24,4 +24,7 @@
     <string name="vote_complete">Voting completed</string>
     <string name="thank_voting">Thank you for voting</string>
     <string name="confirm_str">Confirm</string>
+    <string name="dot">⦁</string>
+    <string name="first_guide">Up to three people can participate in early voting per day.</string>
+    <string name="second_guide">Three new voting tickets are issued every day at midnight (00:00), and you can vote anew every day during the early voting period</string>
 </resources>
