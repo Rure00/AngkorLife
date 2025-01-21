@@ -15,4 +15,10 @@
     <string name="vote_info">※ You can vote for up to 3 candidates</string>
     <string name="vote_str">Vote</string>
     <string name="voted_num">%s voted</string>
+    <string name="entry_num">Entry No.%d</string>
+    <string name="education">Education</string>
+    <string name="major">Major</string>
+    <string name="hobbies">Hobbies</string>
+    <string name="talent">Talent</string>
+    <string name="ambition">Ambition</string>
 </resources>

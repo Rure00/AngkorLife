@@ -4,7 +4,8 @@ data class ProfileData(
     val name: String,
     val candidateId: Int,
     val candidateNumber: Int,
-    val profileUrl: String,
+    val profileThumbnail: String,
+    val profileUrls: List<String>,
     val voteCnt: Int,
     val voted: Boolean,
 

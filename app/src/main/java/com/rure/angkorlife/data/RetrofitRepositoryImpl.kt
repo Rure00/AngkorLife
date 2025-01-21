@@ -1,13 +1,10 @@
 package com.rure.angkorlife.data
 
-import android.util.Log
 import com.rure.angkorlife.data.datasource.RetrofitDataSource
 import com.rure.angkorlife.data.dto.CandidateListRequestDto
 import com.rure.angkorlife.data.dto.SortType
 import com.rure.angkorlife.data.dto.VoteRequestDto
 import com.rure.angkorlife.data.entity.CandidateDetail
-import com.rure.angkorlife.data.entity.CandidateProfile
-import com.rure.angkorlife.data.entity.PageCandidateList
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
 import com.rure.angkorlife.presentation.state.ProfileData
@@ -65,7 +62,8 @@ class RetrofitRepositoryImpl @Inject constructor(
                         name = item.name,
                         candidateId = item.id,
                         candidateNumber = item.candidateNumber,
-                        profileUrl = listBody.content[index].profileUrl,
+                        profileThumbnail = listBody.content[index].profileUrl,
+                        profileUrls = item.profileInfoList.map { it.profileUrl },
                         voteCnt = listBody.content[index].voteCnt.toInt(),
                         voted = item.voted,
                         country = item.country,

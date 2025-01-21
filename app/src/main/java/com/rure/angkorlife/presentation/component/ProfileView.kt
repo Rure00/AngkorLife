@@ -24,9 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.rure.angkorlife.R
-import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.utils.getDecimalFormat
 import com.rure.angkorlife.ui.theme.BoxBackground
@@ -48,7 +46,7 @@ fun ProfileView(
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(candidateProfile.profileUrl)
+                .data(candidateProfile.profileThumbnail)
                 .build(),
             contentDescription = null,
             placeholder = painterResource(R.drawable.profile_placeholder),
