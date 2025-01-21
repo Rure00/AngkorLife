@@ -17,21 +17,26 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rure.angkorlife.R
 import com.rure.angkorlife.data.entity.CandidateDetail
 import com.rure.angkorlife.data.entity.CandidateProfile
+import com.rure.angkorlife.presentation.MainActivity
 import com.rure.angkorlife.presentation.component.ProfileView
 import com.rure.angkorlife.presentation.viewmodel.MainViewModel
 import com.rure.angkorlife.ui.theme.TextBlue
@@ -41,74 +46,25 @@ import com.rure.angkorlife.ui.theme.White
 @Composable
 fun VotePage(
     toProfileScreen: (CandidateProfile) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = viewModel(LocalContext.current as MainActivity)
 ) {
-    val votedCandidateList = remember {
-        //TODO: 고치기
-        mutableStateOf(listOf<CandidateDetail>())
-    }
-    val candidateProfiles = remember {
-        //TODO: 고치기
-        //mutableStateOf(listOf<CandidateList>())
-        listOf(
-            CandidateProfile(
-                id = 8310,
-                candidateNumber = 6789,
-                name = "Austin McCormick",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "vix"
-            ),
-            CandidateProfile(
-                id = 7914,
-                candidateNumber = 2086,
-                name = "Reyna Mayo",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "sed"
-            ),
-            CandidateProfile(
-                id = 5562,
-                candidateNumber = 2694,
-                name = "Alisha Lamb",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "habitant"
-            ),
-            CandidateProfile(
-                id = 2158,
-                candidateNumber = 7228,
-                name = "Bernadette Tillman",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "porro"
-            ),
-            CandidateProfile(
-                id = 5857,
-                candidateNumber = 5807,
-                name = "Enid Price",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "mandamus"
-            ),
-            CandidateProfile(
-                id = 2390,
-                candidateNumber = 6986,
-                name = "Noreen Hudson",
-                profileUrl = "https://angkorchat-bucket.s3.ap-southeast-1.amazonaws.com/candidate/47/7c21605a2fd04df796a047b86effcbcb.png",
-                voteCnt = "graeci"
-            )
-        )
-    }
+    val tag = "VotePage"
+
+    val candidateProfiles by mainViewModel.candidateProfiles.collectAsState()
 
     val maxHeight = remember { mutableStateOf(9999) }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxWidth().heightIn(0.dp, maxHeight.value.dp).padding(horizontal = 19.dp)
-            .onSizeChanged {
-                maxHeight.value = it.height
-                Log.d("VotePage", "MaxHeigth: ${maxHeight.value}")
-            },
+            .onSizeChanged { maxHeight.value = it.height },
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(40.dp),
         userScrollEnabled = false
     ) {
+        Log.d(tag, "State list: ${candidateProfiles.joinToString { it.name }}")
+        Log.d(tag, "viewmodel list: ${mainViewModel.candidateProfiles.value.joinToString { it.name }}")
+
         item(span = { GridItemSpan(this.maxLineSpan) }) {
             Column {
                 Spacer(modifier = Modifier.height(50.dp))
@@ -138,15 +94,12 @@ fun VotePage(
         itemsIndexed(candidateProfiles) { index, item ->
             ProfileView(
                 candidateProfile = item,
-                isVoted = votedCandidateList.value.any {
-                    item.id == it.id
-                },
+                isVoted = mainViewModel.isVoted(item.id),
                 onProfileClick = {
                     toProfileScreen(item)
                 },
                 onVote = {
-                    //TODO: Do Vote
-
+                    mainViewModel.vote(item.id.toString())
                 }
             )
         }

@@ -6,6 +6,7 @@ import com.rure.angkorlife.data.dto.CandidateListRequestDto
 import com.rure.angkorlife.data.dto.SortType
 import com.rure.angkorlife.data.dto.VoteRequestDto
 import com.rure.angkorlife.data.entity.CandidateDetail
+import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.data.entity.PageCandidateList
 import com.rure.angkorlife.domain.repository.RetrofitRepository
 import com.rure.angkorlife.domain.repository.RetrofitResult
@@ -41,27 +42,35 @@ class RetrofitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCandidateList(
-        page: Int,
-        size: Int,
-        sort: List<SortType>
-    ): RetrofitResult<PageCandidateList> {
+    override suspend fun getCandidateList(): RetrofitResult<List<CandidateProfile>> {
         val result = dataSource.getCandidateList(
             candidateListRequestDto = CandidateListRequestDto(
-                page = page,
-                size = size,
-                sort = sort
+                page = 0,
+                size = 1000,
+                sort = listOf(SortType.CandidateNumberASC)
             )
         )
         val body = result.getOrNull()
 
         return if(result.isSuccess && body != null) {
-            RetrofitResult.Success(body)
+            RetrofitResult.Success(body.content)
         } else {
             RetrofitResult.Failure(
                 result.exceptionOrNull() ?: Exception("getCandidateList) Body is null $tag")
             )
         }
 
+    }
+
+    override suspend fun getMyVoteList(userId: String): RetrofitResult<List<Int>> {
+        val result = dataSource.getVoted(userId = userId)
+        val body = result.getOrNull()
+        return if(result.isSuccess && body != null) {
+            RetrofitResult.Success(body)
+        } else {
+            RetrofitResult.Failure(
+                result.exceptionOrNull() ?: Exception("getMyVoteList) Body is null $tag")
+            )
+        }
     }
 }

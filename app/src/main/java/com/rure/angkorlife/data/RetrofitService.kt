@@ -33,9 +33,8 @@ interface RetrofitService {
     ): Response<PageCandidateList>
 
 
-    //TODO: 미구현??
     @GET("vote/voted/candidate/list")
     suspend fun getVoteHistory(
         @Query("userId") userId: String
-    )
+    ): Response<List<Int>>
 }

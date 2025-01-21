@@ -14,4 +14,5 @@
     <string name="candidate_title">2024\nCadidate List</string>
     <string name="vote_info">※ You can vote for up to 3 candidates</string>
     <string name="vote_str">Vote</string>
+    <string name="voted_num">%s voted</string>
 </resources>

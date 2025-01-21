@@ -27,12 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rure.angkorlife.R
+import com.rure.angkorlife.presentation.MainActivity
 import com.rure.angkorlife.presentation.component.RoundButton
 import com.rure.angkorlife.presentation.component.LoginTextField
 import com.rure.angkorlife.presentation.viewmodel.MainViewModel
@@ -44,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     toHomeScreen: () -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel<MainViewModel>()
+    mainViewModel: MainViewModel = viewModel(LocalContext.current as MainActivity)
 ) {
     val tag = "LoginScreen"
 
@@ -52,9 +55,6 @@ fun LoginScreen(
 
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
-    val homeBottomImageHeight = remember {
-        mutableIntStateOf(0)
-    }
     val keyboardHeight = WindowInsets.ime.getBottom(LocalDensity.current)
 
     LaunchedEffect(key1 = keyboardHeight) {

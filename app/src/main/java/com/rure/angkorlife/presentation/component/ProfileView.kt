@@ -26,6 +26,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.rure.angkorlife.R
 import com.rure.angkorlife.data.entity.CandidateProfile
+import com.rure.angkorlife.presentation.utils.getDecimalFormat
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.White
 
@@ -68,7 +69,7 @@ fun ProfileView(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = candidateProfile.voteCnt,
+            text = stringResource(R.string.voted_num, getDecimalFormat(candidateProfile.voteCnt)),
             color = TextBlue,
             fontWeight = FontWeight.W500,
             fontSize = 16.sp,
