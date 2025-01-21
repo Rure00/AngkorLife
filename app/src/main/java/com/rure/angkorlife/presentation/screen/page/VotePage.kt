@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -40,6 +41,9 @@ import com.rure.angkorlife.presentation.MainActivity
 import com.rure.angkorlife.presentation.component.ProfileView
 import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.viewmodel.MainViewModel
+import com.rure.angkorlife.ui.theme.BackgroundBlack2
+import com.rure.angkorlife.ui.theme.GradientBottom
+import com.rure.angkorlife.ui.theme.GradientTop
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.TextGray2
 import com.rure.angkorlife.ui.theme.White
@@ -57,7 +61,9 @@ fun VotePage(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxWidth().heightIn(0.dp, maxHeight.value.dp).padding(horizontal = 19.dp)
+        modifier = Modifier.fillMaxWidth().heightIn(0.dp, maxHeight.value.dp)
+            .background(color = BackgroundBlack2)
+            .padding(horizontal = 19.dp)
             .onSizeChanged { maxHeight.value = it.height },
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(40.dp),
@@ -105,7 +111,6 @@ fun VotePage(
         }
 
         item(span = { GridItemSpan(this.maxLineSpan) }) {
-            Spacer(modifier = Modifier.height(28.dp).background(color = Color.Black))
             Image(
                 painter = painterResource(R.drawable.copy_right),
                 contentDescription = null,
