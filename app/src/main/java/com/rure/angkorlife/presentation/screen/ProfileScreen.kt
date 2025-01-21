@@ -226,7 +226,7 @@ fun ProfileScreen(
         ) {
             if(targetCandidate.value.voted) {
                 RoundButton(
-                    label = stringResource(R.string.vote_str),
+                    label = stringResource(R.string.voted_str),
                     color = White,
                     textColor = ButtonBlue,
                     drawableId = R.drawable.voted,
