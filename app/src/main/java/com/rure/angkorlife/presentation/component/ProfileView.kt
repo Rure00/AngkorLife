@@ -1,6 +1,7 @@
 package com.rure.angkorlife.presentation.component
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +29,7 @@ import com.rure.angkorlife.R
 import com.rure.angkorlife.data.entity.CandidateProfile
 import com.rure.angkorlife.presentation.state.ProfileData
 import com.rure.angkorlife.presentation.utils.getDecimalFormat
+import com.rure.angkorlife.ui.theme.BoxBackground
 import com.rure.angkorlife.ui.theme.TextBlue
 import com.rure.angkorlife.ui.theme.White
 
@@ -47,15 +49,15 @@ fun ProfileView(
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(candidateProfile.profileUrl)
-                .crossfade(true)
                 .build(),
             contentDescription = null,
             placeholder = painterResource(R.drawable.profile_placeholder),
             modifier = Modifier.size(156.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
+                .background(color = BoxBackground)
                 .clickable { onProfileClick() },
             error = painterResource(R.drawable.fail_profile),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             onSuccess = { Log.d(tag, "Image load success") },
             onError = { Log.d(tag, "Image load Error: ${it.result.throwable.message}") },
         )
