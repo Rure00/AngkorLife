@@ -31,7 +31,7 @@ fun NavGraphBuilder.mainNavGraph(navController: NavController, onScreenChanged: 
         }
 
         composable(
-            route = Destination.Profile.route,
+            route = Destination.Profile.route +"/{id}",
             arguments = listOf(
                 navArgument("id") { type = NavType.IntType }
             )
